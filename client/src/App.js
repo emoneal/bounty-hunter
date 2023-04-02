@@ -22,11 +22,19 @@ function App() {
   }
 
   function deleteBounty(bountyId) {
-    axios.delete("/bounties/${bountyId}")
+    axios.delete(`/bounties/${bountyId}`)
       .then(res => {
         setBounties(prevBounties => prevBounties.filter(bounty => bounty._id !== bountyId))
       })
       .catch(err=> console.log(err))
+  }
+
+  function editBounty(updates, bountyId) {
+    axios.put(`/bounties/${bountyId}`, updates)
+      .then(res => {
+        setBounties(prevBounties => prevBounties.map(bounty => bounty._id !== bountyId ? bounty : res.data))
+      })
+      .catch(err => console.log(err))
   }
 
 
@@ -37,12 +45,14 @@ function App() {
   return (
     <div className="App">
       <AddBountyForm 
-        addBounty={addBounty}
+        submit={addBounty}
+        btnText="Add Bounty"
       />
       {bounties.map(bounty => 
         <BountyList {...bounty} 
         key={bounty.firstName}
-        deleteBounty={deleteBounty} />)}
+        deleteBounty={deleteBounty}
+        editBounty={editBounty} />)}
     
     </div>
 )}
