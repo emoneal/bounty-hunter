@@ -41,9 +41,13 @@ bountyRouter.put("/:bountyId", (req, res) => {
 })
 
 // Get ONE bounty
-bountyRouter.get("/:bountyId", (req, res) => {
+bountyRouter.get("/:bountyId", (req, res, next) => {
     const bountyId = req.params.bountyId
     const foundBounty = bounties.find(bounties => bounties._id === bountyId)  
+    if (!foundBounty) {
+        const error = new Error("The item was not found")
+        return next(error)
+    }
     res.send(foundBounty)
 })
 

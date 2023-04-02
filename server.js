@@ -1,12 +1,22 @@
 const express = require("express")
 const app = express()
 const {v4: uuidv4} = require('uuid')
+const morgan = require('morgan')
 
 // Middleware (every request) //
-app.use(express.json())
+app.use(express.json()) // Looks for a request body
+app.use(morgan('dev')) // Logs requests to server
 
 // Routes //
 app.use("/bounties", require("./routes/bountyRouter.js"))
+
+
+// Error Handler
+
+app.use((err, req, res, next) => {
+    console.log(err)
+    return res.send({errMsg: err.message})
+})
 
 
 // Server Listen //
