@@ -38,6 +38,17 @@ function App() {
   }
 
 
+  function handleFilter(e) {
+    if (e.target.value === "reset") {
+      getBounties()
+    } else {
+      axios.get(`/bounties/search/isliving?living=${e.target.value}`)
+        .then(res => setBounties(res.data))
+        .catch(err => console.log(err))
+    }
+  }
+
+
   useEffect(() => {
     getBounties()
   }, [])
@@ -48,6 +59,14 @@ function App() {
         submit={addBounty}
         btnText="Add Bounty"
       />
+
+    <h4>Filter by Living</h4>
+    <select onChange={handleFilter} className="filter-form">
+      <option value="reset">All Bounties</option>
+      <option value={true}>Alive</option>
+      <option value={false}>Deceased</option>
+    </select>
+
       {bounties.map(bounty => 
         <BountyList {...bounty} 
         key={bounty.firstName}

@@ -68,19 +68,20 @@ bountyRouter.get("/:bountyId", (req, res, next) => {
 
 
 // isLiving query (bool)
-bountyRouter.get("/search/isliving", (req, res) => {
-    let isLiving = req.query.living
-    if (isLiving === "true") {
-        isLiving = true
-        const filteredLiving = bounties.filter(bounty => bounty.living === isLiving)
-        res.send(filteredLiving)
-    } else if (isLiving === "false") {
-        isLiving = false
-        const filteredLiving = bounties.filter(bounty => bounty.living === isLiving)
-        res.send(filteredLiving)
-    }
+bountyRouter.get("/search/isliving", (req, res, next) => {
+    
+    
+    Bounty.find({living: req.query.living}, (err, bounties) => {
+        if (err) {
+            res.status(500) 
+            return next(err)
+        }
+        return res.status(200).send(bounties)
+    })
 
-})
+}
+
+)
 
 
 
